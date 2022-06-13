@@ -2,56 +2,55 @@ import java.util.LinkedList;
 
 public class PC {
 
-  // Create a list shared by producer and consumer
-  // Size of list is 2.
+  // Lista de tamanho 2 para contemplar exemplo de produtor - consumidor
   LinkedList<Integer> list = new LinkedList<>();
   int capacity = 2;
 
-  // Function called by producer thread
+  // Função produtor para ser chamada na thread
   public void produce() throws InterruptedException {
     int value = 0;
     while (true) {
+      // synchronized para impedir outros metodos de executar enquanto executa
+      // este escopo
       synchronized (this) {
-        // producer thread waits while list
-        // is full
+        // se a list estiver cheia await
         while (list.size() == capacity) {
           wait();
         }
 
         System.out.println("Producer produced-" + value);
 
-        // to insert the jobs in the list
+        // adicionar elementos na lista sempre aumentando o valor a ser adicionado
         list.add(value++);
 
-        // notifies the consumer thread that
-        // now it can start consuming
+        // notificar o consumidor para começar a consumir
         notify();
 
-        // makes the working of program easier
-        // to understand
+        // dorme 1000 milisegundos para executar mais lentamente
         Thread.sleep(1000);
       }
     }
   }
 
-  // Function called by consumer thread
+  // Função consumidor para ser chamada na thread
   public void consume() throws InterruptedException {
     while (true) {
+      // synchronized para impedir outros metodos de executar enquanto executa
+      // este escopo
       synchronized (this) {
-        // consumer thread waits while list
-        // is empty
+        // se a list estiver vazia await
         while (list.size() == 0)
           wait();
 
-        // to retrieve the first job in the list
+        // remove o primeiro elemento da lista
         int val = list.removeFirst();
 
         System.out.println("Consumer consumed-" + val);
 
-        // Wake up producer thread
+        // acorda o produtor para começa a produzir elementos e colocar na lista
         notify();
 
-        // and sleep
+        // dorme 1000 milisegundos para executar mais lentamente
         Thread.sleep(1000);
       }
     }

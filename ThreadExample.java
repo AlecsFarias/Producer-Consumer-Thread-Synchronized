@@ -1,11 +1,10 @@
 
 public class ThreadExample {
     public static void main(String[] args) throws InterruptedException {
-        // Object of a class that has both produce()
-        // and consume() methods
+        // Objeto da classe que contem produtor e consumidor
         final PC pc = new PC();
 
-        // Create producer thread
+        // cria thread produtor
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -17,7 +16,7 @@ public class ThreadExample {
             }
         });
 
-        // Create consumer thread
+        // cria thread consumidor
         Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -29,11 +28,11 @@ public class ThreadExample {
             }
         });
 
-        // Start both threads
+        // iniciar as threads
         t1.start();
         t2.start();
 
-        // t1 finishes before t2
+        // t1 termina antes de t2
         t1.join();
         t2.join();
     }
